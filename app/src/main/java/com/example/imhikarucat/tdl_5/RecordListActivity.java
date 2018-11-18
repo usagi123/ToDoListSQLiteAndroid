@@ -26,10 +26,8 @@ public class RecordListActivity extends AppCompatActivity {
     ListView mListView;
     ArrayList<Model> mList;
     RecordListAdapter mAdapter = null;
-//    static boolean firstTime = true;
-    SharedPreferences firstTime;
 
-    public SQLiteHelper mSQLiteHelper;
+    public static SQLiteHelper mSQLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +49,18 @@ public class RecordListActivity extends AppCompatActivity {
         mSQLiteHelper.queryData("CREATE TABLE IF NOT EXISTS RECORD(id INTEGER PRIMARY KEY AUTOINCREMENT, task VARCHAR, duration VARCHAR, status VARCHAR)");
 
         //Insert 2 sample tasks, put into pref so it can only added once
-        firstTime = getSharedPreferences("FirstTime", MODE_PRIVATE);
+        SharedPreferences firstTime = getSharedPreferences("FirstTime", MODE_PRIVATE);
         if (!firstTime.getBoolean("isFirstTime", false)) {
             //your code goes here
             try {
-                mSQLiteHelper.insertData("Mindful breathing", "15", "New");
+                mSQLiteHelper.insertData("Mindful breathing".trim(), "15".trim(), "New".trim());
             }
             catch (Exception e){
                 e.printStackTrace();
             }
 
             try {
-                mSQLiteHelper.insertData("Bedtime breathing", "15", "New");
+                mSQLiteHelper.insertData("Bedtime breathing".trim(), "15".trim(), "New".trim());
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -70,7 +68,7 @@ public class RecordListActivity extends AppCompatActivity {
             final SharedPreferences pref = getSharedPreferences("FirstTime", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("isFirstTime", true);
-            editor.commit();
+            editor.apply();
         }
 
         //get all data from sqlite

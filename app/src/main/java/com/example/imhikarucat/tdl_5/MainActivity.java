@@ -1,6 +1,7 @@
 package com.example.imhikarucat.tdl_5;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
         mBtnAdd = findViewById(R.id.btnAdd);
         mBtnList = findViewById(R.id.btnList);
 
-        //creating database
+        //connecting database
         mSQLiteHelper = new SQLiteHelper(this, "RECORDDB.sqlite", null, 1);
+
 
         //add record to sqlite
         mBtnAdd.setOnClickListener(new View.OnClickListener() {

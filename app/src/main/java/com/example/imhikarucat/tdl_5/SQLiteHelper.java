@@ -38,7 +38,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     public void updateData(String task, String duration, String status, int id){
         SQLiteDatabase database = getWritableDatabase();
         //query to update record
-        String sql = "UPDATE RECORD SET name=?, age=?, phone=? WHERE id=?";
+        String sql = "UPDATE RECORD SET task=?, duration=?, status=? WHERE id=?";
 
         SQLiteStatement statement = database.compileStatement(sql);
 
