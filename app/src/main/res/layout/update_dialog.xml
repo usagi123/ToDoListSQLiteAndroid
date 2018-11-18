@@ -27,7 +27,6 @@
         android:ems="10"/>
     <Button
         android:id="@+id/btnUpdate"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
         android:text="Update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

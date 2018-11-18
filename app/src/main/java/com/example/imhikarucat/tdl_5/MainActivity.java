@@ -38,20 +38,25 @@ public class MainActivity extends AppCompatActivity {
         mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    mSQLiteHelper.insertData(
-                            mEdtTask.getText().toString().trim(),
-                            mEdtDuration.getText().toString().trim(),
-                            mEdtStatus.getText().toString().trim()
-                    );
-                    Toast.makeText(MainActivity.this, "Added successfully", Toast.LENGTH_SHORT).show();
-                    //reset views
-                    mEdtTask.setText("");
-                    mEdtDuration.setText("");
-                    mEdtStatus.setText("");
-                }
-                catch (Exception e){
-                    e.printStackTrace();
+                //Condition to catch empty entity added into db, avoid error
+                if (mEdtTask.getText().toString().trim().matches("") && mEdtDuration.getText().toString().trim().matches("")){
+                    Toast.makeText(MainActivity.this, "Empty field", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        mSQLiteHelper.insertData(
+                                mEdtTask.getText().toString().trim(),
+                                mEdtDuration.getText().toString().trim(),
+                                mEdtStatus.getText().toString().trim()
+                        );
+                        Toast.makeText(MainActivity.this, "Added successfully", Toast.LENGTH_SHORT).show();
+                        //reset views
+                        mEdtTask.setText("");
+                        mEdtDuration.setText("");
+                        mEdtStatus.setText("");
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -65,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
 
     }
 }

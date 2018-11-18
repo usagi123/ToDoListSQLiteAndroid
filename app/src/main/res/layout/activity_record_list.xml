@@ -21,4 +21,14 @@
         android:src="@drawable/ic_add"
         android:id="@+id/addBtn"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_toStartOf="@+id/addBtn"
+        android:onClick="onTimerClicked"
+        android:src="@drawable/ic_timer" />
+
 </RelativeLayout>

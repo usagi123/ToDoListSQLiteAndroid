@@ -1,19 +1,12 @@
 package com.example.imhikarucat.tdl_5;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class RecordListActivity extends AppCompatActivity {
@@ -36,6 +26,8 @@ public class RecordListActivity extends AppCompatActivity {
     ListView mListView;
     ArrayList<Model> mList;
     RecordListAdapter mAdapter = null;
+//    static boolean firstTime = true;
+    SharedPreferences firstTime;
 
     public SQLiteHelper mSQLiteHelper;
 
@@ -56,7 +48,30 @@ public class RecordListActivity extends AppCompatActivity {
         mSQLiteHelper = new SQLiteHelper(this, "RECORDDB.sqlite", null, 1);
 
         //creating table in database
-        mSQLiteHelper.queryData("CREATE TABLE IF NOT EXISTS RECORD(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, age VARCHAR, phone VARCHAR)");
+        mSQLiteHelper.queryData("CREATE TABLE IF NOT EXISTS RECORD(id INTEGER PRIMARY KEY AUTOINCREMENT, task VARCHAR, duration VARCHAR, status VARCHAR)");
+
+        //Insert 2 sample tasks, put into pref so it can only added once
+        firstTime = getSharedPreferences("FirstTime", MODE_PRIVATE);
+        if (!firstTime.getBoolean("isFirstTime", false)) {
+            //your code goes here
+            try {
+                mSQLiteHelper.insertData("Mindful breathing", "15", "New");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            try {
+                mSQLiteHelper.insertData("Bedtime breathing", "15", "New");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            final SharedPreferences pref = getSharedPreferences("FirstTime", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isFirstTime", true);
+            editor.commit();
+        }
 
         //get all data from sqlite
         Cursor cursor = mSQLiteHelper.getData("SELECT * FROM RECORD");
@@ -121,19 +136,18 @@ public class RecordListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     private void showDialogDelete(final int idRecord) {
         AlertDialog.Builder dialogDelete = new AlertDialog.Builder(RecordListActivity.this);
-        dialogDelete.setTitle("Warning!!");
-        dialogDelete.setMessage("Are you sure to delete?");
+        dialogDelete.setTitle("Warning");
+        dialogDelete.setMessage("Are you sure?");
         dialogDelete.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     MainActivity.mSQLiteHelper.deleteData(idRecord);
-                    Toast.makeText(RecordListActivity.this, "Delete successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecordListActivity.this, "Delete success", Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception e){
                     Log.e("error", e.getMessage());
@@ -194,7 +208,7 @@ public class RecordListActivity extends AppCompatActivity {
                             edtStatus.getText().toString().trim(),
                             position);
                     dialog.dismiss();
-                    Toast.makeText(getApplicationContext(), "Update Successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Update success", Toast.LENGTH_SHORT).show();
                 }
                 catch (Exception error){
                     Log.e("Update error", error.getMessage());
@@ -218,5 +232,9 @@ public class RecordListActivity extends AppCompatActivity {
             mList.add(new Model(id, task, duration, status));
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void onTimerClicked(View view) {
+        startActivity(new Intent(RecordListActivity.this, Timer.class));
     }
 }

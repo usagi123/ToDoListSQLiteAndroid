@@ -40,8 +40,7 @@
             android:layout_below="@id/edtStatus"
             android:layout_centerHorizontal="true"
             android:minWidth="160dp"
-            android:text="Save Record"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:text="Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
@@ -49,8 +48,7 @@
             android:layout_below="@id/btnAdd"
             android:layout_centerHorizontal="true"
             android:minWidth="160dp"
-            android:text="Record List"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:text="To do list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
